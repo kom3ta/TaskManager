@@ -27,6 +27,17 @@ class ViewController: UIViewController {
             UserDefaults().set(true, forKey: "setup")
             UserDefaults().set(0, forKey: "count")
         }
+        updateTasks()
+    }
+    
+    func updateTasks() {
+        guard let count = UserDefaults().value(forKey: "count") as? Int else { return }
+        
+        for i in 0..<count {
+            if let task = UserDefaults().value(forKey: "task_\(i+1)") as? String {
+                tasks.append(task)
+            }
+        }
     }
     
     
@@ -34,6 +45,12 @@ class ViewController: UIViewController {
         
         let vc = storyboard?.instantiateViewController(identifier: "entry") as! EntryViewController
         vc.title = "New Task"
+        vc.update = {
+            DispatchQueue.main.async {
+                self.updateTasks()
+            }
+            
+        }
         navigationController?.pushViewController(vc, animated: true)
     }
     
