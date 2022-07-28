@@ -15,11 +15,28 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+      
+        self.title = "Tasks"
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+        //Setup
+        
+        if !UserDefaults().bool(forKey: "setup") {
+            UserDefaults().set(true, forKey: "setup")
+            UserDefaults().set(0, forKey: "count")
+        }
     }
     
     
-
+    @IBAction func didTapAdd(_ sender: UIBarButtonItem) {
+        
+        let vc = storyboard?.instantiateViewController(identifier: "entry") as! EntryViewController
+        vc.title = "New Task"
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
 }
 
 extension ViewController: UITableViewDelegate {
